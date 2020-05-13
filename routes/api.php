@@ -20,6 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('auth/login', 'Api\Auth\AuthController@login');
 Route::post('auth/register', 'Api\Auth\AuthController@register');
+Route::apiResource('articulos', 'Api\Articulo\ArticuloController');
+Route::apiResource('ordenes', 'Api\Orden\OrdenController');
+Route::apiResource('clientes', 'Api\Cliente\ClienteController');
+Route::apiResource('feedback', 'Api\Feedback\FeedbackController');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user-detail', 'Api\Auth\AuthController@userDetail');
