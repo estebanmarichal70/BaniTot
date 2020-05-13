@@ -15,8 +15,7 @@ class AddFeedbacksToArticulos extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('articulos', function (Blueprint $table) {
-            $table->unsignedBigInteger('feedback_id');
-            $table->foreign('feedback_id')->nullable()->references('id')->on('feedbacks');
+            $table->foreignId('feedback_id')->nullable()->constrained();
         });
     }
 
@@ -29,8 +28,7 @@ class AddFeedbacksToArticulos extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('articulos', function (Blueprint $table) {
-            $table->unsignedBigInteger('feedback_id');
-            $table->foreign('feedback_id')->nullable()->references('id')->on('feedbacks');
+            $table->foreignId('feedback_id')->nullable()->constrained();
         });
     }
 }

@@ -21,7 +21,7 @@ class CreateClientesTable extends Migration
             $table->string('ciudad');
             $table->string('departamento');
             $table->string('cp');
-            $table->foreignId('orden_id')->constrained();
+            $table->foreignId('orden_id')->nullable()->constrained();
         });
     }
 

@@ -15,7 +15,7 @@ class AddFeedbacksToClientes extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('clientes', function (Blueprint $table) {
-            $table->foreignId('feedback_id')->constrained();
+            $table->foreignId('feedback_id')->nullable()->constrained();
         });
     }
 
@@ -28,7 +28,7 @@ class AddFeedbacksToClientes extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('clientes', function (Blueprint $table) {
-            $table->foreignId('feedback_id')->constrained();
+            $table->foreignId('feedback_id')->nullable()->constrained();
         });
     }
 }

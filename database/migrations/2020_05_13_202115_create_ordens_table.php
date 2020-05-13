@@ -18,7 +18,8 @@ class CreateOrdensTable extends Migration
             $table->id();
             $table->timestamps();
             $table->float('monto');
-            $table->foreignId('articulo_id')->constrained();
+
+            $table->foreignId('articulo_id')->nullable()->constrained();
         });
     }
 

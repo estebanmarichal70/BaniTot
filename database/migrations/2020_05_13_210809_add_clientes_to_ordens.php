@@ -15,7 +15,7 @@ class AddClientesToOrdens extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('ordens', function (Blueprint $table) {
-            $table->foreignId('cliente_id')->constrained();
+            $table->foreignId('cliente_id')->nullable()->constrained();
         });
     }
 
@@ -28,7 +28,7 @@ class AddClientesToOrdens extends Migration
     {
         Schema::enableForeignKeyConstraints();
         Schema::table('ordens', function (Blueprint $table) {
-            $table->foreignId('cliente_id')->constrained();
+            $table->foreignId('cliente_id')->nullable()->constrained();
         });
     }
 }
