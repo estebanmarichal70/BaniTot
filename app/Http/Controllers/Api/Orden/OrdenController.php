@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Orden;
 
 use App\Http\Controllers\Controller;
+use App\Models\Orden;
 use Illuminate\Http\Request;
 use Validator;
+
 
 class OrdenController extends Controller
 {
@@ -27,12 +29,10 @@ class OrdenController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'articulos' => 'required',
             'estado'=> 'required',
             'monto' => 'required',
             'cliente'=> 'required'
         ]);
-
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 400);
         }

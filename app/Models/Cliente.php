@@ -16,10 +16,10 @@ class Cliente extends User
     ];
 
     public function ordenes() {
-        return $this->hasMany('Models\Orden');
+        return $this->hasMany('Models\Orden','cliente_id', 'id');
     }
 
     public function feedbacks() {
-        return $this->hasMany('Models\Feedback');
+        return $this->hasMany('Models\Feedback','cliente_id', 'id');
     }
 }

@@ -31,9 +31,7 @@ class ClienteController extends Controller
             'calle' => 'required',
             'ciudad' => 'required',
             'departamento' => 'required',
-            'cp' => 'required',
-            'imagen' => 'required',
-            'marca' => 'required',
+            'cp' => 'required'
         ]);
 
         if ($validator->fails()) {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdensTable extends Migration
+class CreateOrdenesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,10 @@ class CreateOrdensTable extends Migration
     public function up()
     {
         Schema::enableForeignKeyConstraints();
-        Schema::create('ordens', function (Blueprint $table) {
+        Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->float('monto');
-
-            $table->foreignId('articulo_id')->nullable()->constrained();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateOrdensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ordens');
+        Schema::dropIfExists('ordenes');
     }
 }

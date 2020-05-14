@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddClientesToOrdens extends Migration
+class AddEstadoToOrdenes extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddClientesToOrdens extends Migration
     public function up()
     {
         Schema::enableForeignKeyConstraints();
-        Schema::table('ordens', function (Blueprint $table) {
-            $table->foreignId('cliente_id')->nullable()->constrained();
+        Schema::table('ordenes', function (Blueprint $table) {
+            $table->enum('estado', ['RECIBIDO','EMBARCADO','CANCELADO','CONFIRMADO','PENDIENTE']);
         });
     }
 
@@ -27,8 +27,8 @@ class AddClientesToOrdens extends Migration
     public function down()
     {
         Schema::enableForeignKeyConstraints();
-        Schema::table('ordens', function (Blueprint $table) {
-            $table->foreignId('cliente_id')->nullable()->constrained();
+        Schema::table('ordenes', function (Blueprint $table) {
+            $table->enum('estado', ['RECIBIDO','EMBARCADO','CANCELADO','CONFIRMADO','PENDIENTE']);
         });
     }
 }

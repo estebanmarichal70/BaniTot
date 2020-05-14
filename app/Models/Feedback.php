@@ -12,16 +12,16 @@ class Feedback extends Model
      * @var array
      */
     protected $fillable = [
-        'id','feedback','rating'
+        'id','feedback','rating', 'articulo_id', 'cliente_id'
     ];
 
     public function articulo()
     {
-        return $this->belongsTo('Models\Articulo');
+        return $this->belongsTo('Models\Articulo', 'articulo_id', 'id');
     }
 
     public function cliente()
     {
-        return $this->belongsTo('Models\Cliente');
+        return $this->belongsTo('Models\Cliente','cliente_id', 'id');
     }
 }

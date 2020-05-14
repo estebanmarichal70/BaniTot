@@ -16,6 +16,6 @@ class Articulo extends Model
     ];
 
     public function feedbacks() {
-        return $this->hasMany('Models\Feedback', 'feedback_id');
+        return $this->hasMany('Models\Feedback', 'articulo_id', 'id');
     }
 }
