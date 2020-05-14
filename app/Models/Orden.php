@@ -18,11 +18,11 @@ class Orden extends Model
 
     public function articulos()
     {
-        return $this->hasMany('Models\Articulo', 'orden_id', 'id');
+        return $this->belongsToMany('App\Models\Articulo', 'orden_articulo', 'orden_id', 'articulo_id');
     }
 
     public function cliente()
     {
-        return $this->belongsTo('Models\Cliente', 'cliente_id', 'id');
+        return $this->belongsTo('App\Models\Cliente', 'cliente_id', 'id');
     }
 }

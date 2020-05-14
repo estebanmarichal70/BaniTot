@@ -17,11 +17,11 @@ class Feedback extends Model
 
     public function articulo()
     {
-        return $this->belongsTo('Models\Articulo', 'articulo_id', 'id');
+        return $this->belongsTo('App\Models\Articulo', 'articulo_id', 'id');
     }
 
     public function cliente()
     {
-        return $this->belongsTo('Models\Cliente','cliente_id', 'id');
+        return $this->belongsTo('App\Models\Cliente','cliente_id', 'id');
     }
 }

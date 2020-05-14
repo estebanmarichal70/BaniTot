@@ -16,6 +16,10 @@ class Articulo extends Model
     ];
 
     public function feedbacks() {
-        return $this->hasMany('Models\Feedback', 'articulo_id', 'id');
+        return $this->hasMany('App\Models\Feedback', 'articulo_id', 'id');
+    }
+
+    public function ordenes(){
+        return $this->belongsToMany('App\Models\Orden', 'orden_articulo', 'articulo_id','orden_id');
     }
 }
