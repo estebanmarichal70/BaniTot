@@ -15,8 +15,13 @@ class CreateOrdenArticuloTable extends Migration
     {
         Schema::create('orden_articulo', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('orden_id')->nullable()->constrained('ordenes');
-            $table->foreignId('articulo_id')->nullable()->constrained();
+            $table->bigInteger('orden_id')->unsigned();
+            $table->bigInteger('articulo_id')->unsigned();
+
+            $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
+            $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');
+            //$table->foreignId('orden_id')->nullable()->constrained('ordenes');
+            //$table->foreignId('articulo_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

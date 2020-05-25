@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedbackTable extends Migration
+class AddUsersToOrdenes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,11 @@ class CreateFeedbackTable extends Migration
      */
     public function up()
     {
-        Schema::enableForeignKeyConstraints();
-        Schema::create('feedback', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->text('feedback');
-            $table->integer('rating');
+        //Schema::enableForeignKeyConstraints();
+        Schema::table('ordenes', function (Blueprint $table) {
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('articulo_id')->unsigned();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             //$table->foreignId('cliente_id')->nullable()->constrained();
-            $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');
-            //$table->foreignId('articulo_id')->nullable()->constrained();
         });
     }
 
@@ -36,6 +28,11 @@ class CreateFeedbackTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedback');
+        //Schema::enableForeignKeyConstraints();
+        Schema::table('ordenes', function (Blueprint $table) {
+            $table->bigInteger('user_id')->unsigned();
+            $table->dropForeign('ordenes_user_id_foreign');
+            //$table->foreignId('cliente_id')->nullable()->constrained();
+        });
     }
 }
