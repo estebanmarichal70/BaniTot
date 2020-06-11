@@ -31,15 +31,15 @@ class FeedbackController extends Controller
             'feedback' => 'required',
             'rating' => 'required',
             'articulo_id' => 'required',
-            'cliente_id' => 'required'
+            'user_id' => 'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 400);
         }
 
-        $cliente = $request->all();
-        $result = Cliente::create($cliente);
+        $feedback = $request->all();
+        $result = Feedback::create($feedback);
 
         return response()->json(['success'=>true, 'feedback'=>$result], 201);
     }

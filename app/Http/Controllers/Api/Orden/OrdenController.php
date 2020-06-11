@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Orden;
 use Illuminate\Http\Request;
 use Validator;
+use App\Models\Articulo;
 
 
 class OrdenController extends Controller
@@ -31,7 +32,9 @@ class OrdenController extends Controller
         $validator = Validator::make($request->all(), [
             'estado'=> 'required',
             'monto' => 'required',
-            'cliente'=> 'required'
+            'user_id'=> 'required',
+            'articulos'=>'required'
+
         ]);
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 400);
@@ -39,6 +42,10 @@ class OrdenController extends Controller
 
         $orden = $request->all();
         $result = Orden::create($orden);
+        foreach ($orden['articulos'] as $articulo_id ){
+            $articulo = Articulo::findOrFail($articulo_id['id']);
+            $result->articulos()->attach($articulo,['cantidad'=>$articulo_id['cantidad']]);
+        }
 
         return response()->json(['success'=>true, 'orden'=>$result], 201);
     }
@@ -51,7 +58,9 @@ class OrdenController extends Controller
      */
     public function show($id)
     {
-        return Orden::findOrFail($id);
+        $orden = Orden::findOrFail($id);
+        $orden['articulos'] = $orden->articulos()->get();
+        return $orden;
     }
 
     /**

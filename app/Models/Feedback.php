@@ -12,7 +12,7 @@ class Feedback extends Model
      * @var array
      */
     protected $fillable = [
-        'id','feedback','rating', 'articulo_id', 'cliente_id'
+        'id','feedback','rating', 'articulo_id', 'user_id'
     ];
 
     public function articulo()
@@ -20,8 +20,8 @@ class Feedback extends Model
         return $this->belongsTo('App\Models\Articulo', 'articulo_id', 'id');
     }
 
-    public function cliente()
+    public function usuario()
     {
-        return $this->belongsTo('App\Models\Cliente','cliente_id', 'id');
+        return $this->belongsTo('App\Models\User','user_id', 'id');
     }
 }

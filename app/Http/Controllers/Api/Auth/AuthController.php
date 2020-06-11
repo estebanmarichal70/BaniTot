@@ -16,8 +16,8 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = $request->user();
+            $data['user']  = $user;
             $data['token'] = $user->createToken('BanitotApp')->accessToken;
-            $data['name']  = $user->name;
             return response()->json($data, 200);
         }
 

@@ -17,6 +17,7 @@ class CreateOrdenArticuloTable extends Migration
             $table->id();
             $table->bigInteger('orden_id')->unsigned();
             $table->bigInteger('articulo_id')->unsigned();
+            $table->bigInteger('cantidad');
 
             $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
             $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');

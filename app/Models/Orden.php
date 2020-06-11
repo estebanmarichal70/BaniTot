@@ -13,16 +13,16 @@ class Orden extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'monto','estado','cliente_id'
+        'id', 'monto','estado','user_id'
     ];
 
     public function articulos()
     {
-        return $this->belongsToMany('App\Models\Articulo', 'orden_articulo', 'orden_id', 'articulo_id');
+        return $this->belongsToMany('App\Models\Articulo', 'orden_articulo', 'orden_id', 'articulo_id')->withPivot('cantidad');
     }
 
-    public function cliente()
+    public function usuario()
     {
-        return $this->belongsTo('App\Models\Cliente', 'cliente_id', 'id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 }
