@@ -14,9 +14,18 @@ class ArticuloController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Articulo::all();
+        if($request->has('order')){
+            if($request->query('order') == 'ASC'){
+                return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+            }
+            else if($request->query('order') == 'DESC'){
+                return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+            }
+        }
+        return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
+
     }
 
     /**
