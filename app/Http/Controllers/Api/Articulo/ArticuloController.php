@@ -16,16 +16,28 @@ class ArticuloController extends Controller
      */
     public function index(Request $request)
     {
+        $marcas = Articulo::select('marca')->distinct()->get();
+
         if($request->has('order')){
             if($request->query('order') == 'ASC'){
-                return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                return $result;
             }
             else if($request->query('order') == 'DESC'){
-                return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                return $result;
             }
         }
-        return Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
-
+        if($request->query('marca') != ""){
+            $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->paginate(9,['*'],'page',$request->query('page'));
+            $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+            return $result;
+        }
+        $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
+        $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+        return $result;
     }
 
     /**
