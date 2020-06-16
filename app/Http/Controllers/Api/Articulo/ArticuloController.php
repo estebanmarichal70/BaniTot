@@ -35,6 +35,34 @@ class ArticuloController extends Controller
             $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
             return $result;
         }
+
+            if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
+
+                if($request->query('marca') != ""){
+                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['precio','<=',$request->query('preciomax')]])->where('marca','=',$request->query('marca'))->paginate(9,['*'],'page',$request->query('page'));
+                    $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                    return $result;
+                }
+                else{
+                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['precio','<=',$request->query('preciomax')]])->paginate(9,['*'],'page',$request->query('page'));
+                    $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                    return $result;
+                }
+
+            }
+            else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
+                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['precio','<=',$request->query('preciomax')]])->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->paginate(9,['*'],'page',$request->query('page'));
+                $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                return $result;
+                //,['marca','=',$request->query('marca')]
+                //->whereBetween('precio',[$request->query('precioMin'),$request->query('precioMax')])
+            }
+            else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
+                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['precio','>=',$request->query('preciomin')]])->paginate(9,['*'],'page',$request->query('page'));
+                $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
+                return $result;
+            }
+
         $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
         return $result;
