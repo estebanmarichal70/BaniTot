@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -16,12 +17,12 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = $request->user();
-            $data['user']  = $user;
+            $data['user'] = $user;
             $data['token'] = $user->createToken('BanitotApp')->accessToken;
             return response()->json($data, 200);
         }
 
-        return response()->json(['error'=>'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function register(Request $request)
@@ -34,14 +35,24 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
         $user = $request->all();
         $user['password'] = Hash::make($user['password']);
-        User::create($user);
+        $u = User::create($user);
 
-        return response()->json(['success'=>true, 'message'=>"Email sent. Please confirm your email account."], 201);
+        $role = Role::where("nombre", "=", "CLIENTE")->first();
+
+        if ($role == null) {
+            $role = Role::create(['nombre' => 'CLIENTE']);
+            $u->roles()->attach($role);
+        } else {
+            $u->roles()->attach($role);
+        }
+
+
+        return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmacion."], 201);
     }
 
     public function userDetail()
