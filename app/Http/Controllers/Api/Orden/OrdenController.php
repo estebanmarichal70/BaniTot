@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Orden;
 
 use App\Http\Controllers\Controller;
+use App\Models\Direccion;
 use App\Models\Orden;
 use Illuminate\Http\Request;
 use Validator;
@@ -33,7 +34,8 @@ class OrdenController extends Controller
             'estado'=> 'required',
             'monto' => 'required',
             'user_id'=> 'required',
-            'articulos'=>'required'
+            'articulos'=>'required',
+            'direccion'=>'required'
 
         ]);
         if ($validator->fails()) {
@@ -46,6 +48,11 @@ class OrdenController extends Controller
             $articulo = Articulo::findOrFail($articulo_id['id']);
             $result->articulos()->attach($articulo,['cantidad'=>$articulo_id['cantidad']]);
         }
+
+        $direccion = $request->input('direccion');
+        $direccion['orden_id'] = $result['id'];
+        $direccion = Direccion::create($direccion);
+        $result['direccion'] = $direccion;
 
         return response()->json(['success'=>true, 'orden'=>$result], 201);
     }
@@ -60,6 +67,7 @@ class OrdenController extends Controller
     {
         $orden = Orden::findOrFail($id);
         $orden['articulos'] = $orden->articulos()->get();
+        $orden['direccion'] = $orden->direccion()->get();
         return $orden;
     }
 

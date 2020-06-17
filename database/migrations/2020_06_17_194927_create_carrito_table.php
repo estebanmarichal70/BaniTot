@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUsersToOrdenes extends Migration
+class CreateCarritoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUsersToOrdenes extends Migration
      */
     public function up()
     {
-        //Schema::enableForeignKeyConstraints();
-        Schema::table('ordenes', function (Blueprint $table) {
+        Schema::create('carrito', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -27,11 +27,6 @@ class AddUsersToOrdenes extends Migration
      */
     public function down()
     {
-        //Schema::enableForeignKeyConstraints();
-        Schema::table('ordenes', function (Blueprint $table) {
-            $table->bigInteger('user_id')->unsigned();
-            $table->dropForeign('ordenes_user_id_foreign');
-            //$table->foreignId('cliente_id')->nullable()->constrained();
-        });
+        Schema::dropIfExists('carrito');
     }
 }
