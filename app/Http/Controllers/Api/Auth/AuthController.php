@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\Carrito;
 use App\Models\Role;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -52,6 +54,8 @@ class AuthController extends Controller
             $u->roles()->attach($role);
         }
 
+        Carrito::create(["user_id"=>$u["id"]]);
+        Wishlist::create(["user_id"=>$u["id"]]);
 
         return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmacion."], 201);
     }

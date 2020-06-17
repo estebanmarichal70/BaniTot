@@ -23,6 +23,8 @@ Route::post('auth/register', 'Api\Auth\AuthController@register');
 Route::apiResource('articulos', 'Api\Articulo\ArticuloController');
 Route::apiResource('ordenes', 'Api\Orden\OrdenController');
 Route::apiResource('feedback', 'Api\Feedback\FeedbackController');
+Route::apiResource('wishlist', 'Api\Wishlist\WishlistController');
+Route::apiResource('carrito', 'Api\Carrito\CarritoController');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user-detail', 'Api\Auth\AuthController@userDetail');

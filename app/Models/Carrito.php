@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Carrito extends Model
 {
+    protected $table = "carrito";
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +18,7 @@ class Carrito extends Model
 
     public function articulos()
     {
-        return $this->belongsToMany('App\Models\Articulo', 'articulo_id', 'id');
+        return $this->belongsToMany('App\Models\Carrito', 'carrito_articulo', 'articulo_id','carrito_id');
     }
 
     public function usuario()

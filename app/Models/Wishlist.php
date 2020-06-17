@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wishlist extends Model
 {
+    protected $table = "wishlist";
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +18,7 @@ class Wishlist extends Model
 
     public function articulos()
     {
-        return $this->belongsToMany('App\Models\Articulo', 'articulo_id', 'id');
+        return $this->belongsToMany('App\Models\Wishlist', 'wishlist_articulo', 'articulo_id','wishlist_id');
     }
 
     public function usuario()

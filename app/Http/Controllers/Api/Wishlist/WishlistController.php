@@ -5,20 +5,11 @@ namespace App\Http\Controllers\Api\Wishlist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Wishlist;
+use App\Models\Articulo;
 use Validator;
 
 class WishlistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -27,7 +18,24 @@ class WishlistController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'wishlist_id' => 'required',
+            'articulo_id' => 'required'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 400);
+        }
+
+        $wish_art = $request->all();
+
+
+        $wishlist = Wishlist::findOrFail($wish_art['wishlist_id']);
+        $articulo = Articulo::findOrFail($wish_art['articulo_id']);
+
+        $articulo->wishlist()->attach($wishlist);
+
+        return response()->json(['success'=>true, 'wishlist_articulo'=>$articulo], 201);
     }
 
     /**
@@ -38,7 +46,9 @@ class WishlistController extends Controller
      */
     public function show($id)
     {
-        return Wishlist::findOrFail($id);
+        $wishlist = Wishlist::findOrFail($id);
+        $wishlist['articulos'] = $wishlist->articulos()->get();
+        return $wishlist;
     }
 
     /**
