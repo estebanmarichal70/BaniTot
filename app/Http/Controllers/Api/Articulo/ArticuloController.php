@@ -18,7 +18,6 @@ class ArticuloController extends Controller
     {
         $marcas = Articulo::select('marca')->distinct()->get();
 
-
             /* Orden Asc */
             if ($request->query('order') == 'ASC') {
 
@@ -26,15 +25,15 @@ class ArticuloController extends Controller
                 if ($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                     if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '<=', $request->query('preciomax'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '<=', $request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '>=', $request->query('preciomin'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '>=', $request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     }
@@ -43,15 +42,15 @@ class ArticuloController extends Controller
                 if ($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                     if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                        $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     }
@@ -60,17 +59,17 @@ class ArticuloController extends Controller
                 if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                     if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','<=',$request->query('preciomax'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->where('precio','<=',$request->query('preciomax'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
@@ -78,7 +77,7 @@ class ArticuloController extends Controller
                 /* Filtra todo menos precio */
                 if($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
 
-                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
@@ -86,36 +85,36 @@ class ArticuloController extends Controller
                 if($request->query('search') == "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                     if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                        $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                        $articulo = Articulo::with('feedbacks')->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('categoria', '=', $request->query('categoria'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                        $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                 }
                 /* Filtra solo por nombre */
                 if($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 /* Filtra solo por marca */
                 if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 /* Filtra solo por orden */
                 if($request->query('search') == "" && $request->query('marca') == "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('categoria', '=', $request->query('categoria'))->orderBy('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
@@ -125,15 +124,15 @@ class ArticuloController extends Controller
                 if ($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                     if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '<=', $request->query('preciomax'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->where('precio', '<=', $request->query('preciomax'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '>=', $request->query('preciomin'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->where('precio', '>=', $request->query('preciomin'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     }
@@ -142,15 +141,15 @@ class ArticuloController extends Controller
                 if ($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                     if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                        $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9, ['*'], 'page', $request->query('page'));
                         $result = ['articulos' => $articulo, 'marcas' => $marcas];
                         return $result;
                     }
@@ -159,17 +158,17 @@ class ArticuloController extends Controller
                 if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                     if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','<=',$request->query('preciomax'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','<=',$request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
@@ -177,7 +176,7 @@ class ArticuloController extends Controller
                 /* Filtra todo menos precio */
                 if($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
 
-                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
@@ -185,36 +184,36 @@ class ArticuloController extends Controller
                 if($request->query('search') == "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                     if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                        $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                        $articulo = Articulo::with('feedbacks')->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                     else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                        $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                        $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                         return $result;
                     }
                 }
                 /* Filtra solo por nombre */
                 if($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 /* Filtra solo por marca */
                 if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 /* Filtra solo por orden */
                 if($request->query('search') == "" && $request->query('marca') == "" && $request->query('preciomax') == "") {
-                    $articulo = Articulo::with('feedbacks')->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('categoria', '=', $request->query('categoria'))->orderByDesc('precio')->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
@@ -225,15 +224,15 @@ class ArticuloController extends Controller
             if ($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                 if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '<=', $request->query('preciomax'))->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->where('precio', '<=', $request->query('preciomax'))->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('precio', '>=', $request->query('preciomin'))->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['marca', '=', $request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->where('precio', '>=', $request->query('preciomin'))->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 }
@@ -242,15 +241,15 @@ class ArticuloController extends Controller
             if ($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                 if ($request->query('preciomax') != "" && $request->query('preciomin') == 0) {
-                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '<=', $request->query('preciomax')]])->where('categoria', '=', $request->query('categoria'))->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 } else if ($request->query('preciomax') != 0 && $request->query('preciomin') != 0) {
-                    $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('nombre', 'like', '%' . $request->query('search') . '%')->where('categoria', '=', $request->query('categoria'))->whereBetween('precio', [$request->query('preciomin'), $request->query('preciomax')])->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 } else if ($request->query('preciomax') == 0 && $request->query('preciomin') == 650) {
-                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->paginate(9, ['*'], 'page', $request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where([['nombre', 'like', '%' . $request->query('search') . '%'], ['precio', '>=', $request->query('preciomin')]])->where('categoria', '=', $request->query('categoria'))->paginate(9, ['*'], 'page', $request->query('page'));
                     $result = ['articulos' => $articulo, 'marcas' => $marcas];
                     return $result;
                 }
@@ -259,17 +258,17 @@ class ArticuloController extends Controller
             if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') != "") {
 
                 if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','<=',$request->query('preciomax'))->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','<=',$request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
@@ -277,7 +276,7 @@ class ArticuloController extends Controller
             /* Filtra todo menos precio */
             if($request->query('search') != "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
 
-                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->paginate(9,['*'],'page',$request->query('page'));
+                $articulo = Articulo::with('feedbacks')->where([['nombre','like','%'.$request->query('search').'%'],['marca','=',$request->query('marca')]])->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                 $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                 return $result;
             }
@@ -285,35 +284,35 @@ class ArticuloController extends Controller
             if($request->query('search') == "" && $request->query('marca') == "" && $request->query('preciomax') != "") {
 
                 if($request->query('preciomax') != "" && $request->query('preciomin') == 0 ){
-                    $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('precio','<=',$request->query('preciomax'))->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 else if($request->query('preciomax') != 0 && $request->query('preciomin') != 0){
-                    $articulo = Articulo::with('feedbacks')->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->whereBetween('precio',[$request->query('preciomin'),$request->query('preciomax')])->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
                 else if($request->query('preciomax') == 0 && $request->query('preciomin') == 650){
-                    $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->paginate(9,['*'],'page',$request->query('page'));
+                    $articulo = Articulo::with('feedbacks')->where('precio','>=',$request->query('preciomin'))->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                     $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                     return $result;
                 }
             }
             /* Filtra solo por nombre */
             if($request->query('search') != "" && $request->query('marca') == "" && $request->query('preciomax') == "") {
-                $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
+                $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                 $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                 return $result;
             }
             /* Filtra solo por marca */
             if($request->query('search') == "" && $request->query('marca') != "" && $request->query('preciomax') == "") {
-                $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->paginate(9,['*'],'page',$request->query('page'));
+                $articulo = Articulo::with('feedbacks')->where('marca','=',$request->query('marca'))->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
                 $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
                 return $result;
             }
         }
-        $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->paginate(9,['*'],'page',$request->query('page'));
+        $articulo = Articulo::with('feedbacks')->where('nombre','like','%'.$request->query('search').'%')->where('categoria', '=', $request->query('categoria'))->paginate(9,['*'],'page',$request->query('page'));
         $result = ['articulos'=>$articulo, 'marcas'=>$marcas];
         return $result;
 
