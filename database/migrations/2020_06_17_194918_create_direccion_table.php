@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdenArticuloTable extends Migration
+class CreateDireccionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateOrdenArticuloTable extends Migration
      */
     public function up()
     {
-        Schema::create('orden_articulo', function (Blueprint $table) {
+        Schema::create('direccion', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->integer('telefono');
+            $table->string('calle');
+            $table->string('info');
+            $table->string('ciudad');
+            $table->string('departamento');
+            $table->integer('codigo');
             $table->bigInteger('orden_id')->unsigned();
-            $table->bigInteger('articulo_id')->unsigned();
-            $table->bigInteger('cantidad');
-
             $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
-            $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -32,6 +34,6 @@ class CreateOrdenArticuloTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orden_articulo');
+        Schema::dropIfExists('direccion');
     }
 }
