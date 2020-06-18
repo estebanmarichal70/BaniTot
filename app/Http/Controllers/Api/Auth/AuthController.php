@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Validator;
 use Hash;
 use App\Models\User;
@@ -52,6 +53,8 @@ class AuthController extends Controller
             $u->roles()->attach($role);
         }
 
+        $this->sendEmailReminder($u);
+
 
         return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmacion."], 201);
     }
@@ -61,5 +64,21 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return response()->json(['user' => $user], 200);
+
+    }
+
+
+    /**
+     * Send an e-mail to the user.
+     *
+     * @param  User  $user
+     */
+    public function sendEmailReminder($user)
+    {
+        Mail::send('emails.confirm_account', ['user' => $user], function ($m) use ($user) {
+            $m->from('no-responder@banitot.uy', 'Banitot PCs & Componentes');
+
+            $m->to($user->email, $user->name)->subject('Confirma tu cuenta!');
+        });
     }
 }
