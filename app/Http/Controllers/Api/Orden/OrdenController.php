@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Direccion;
 use App\Models\Orden;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\Articulo;
 
@@ -30,15 +31,18 @@ class OrdenController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        /*$validator = Validator::make($request->all(), [
             'estado'=> 'required',
             'monto' => 'required',
             'user_id'=> 'required',
             'articulos'=>'required',
             'direccion'=>'required'
 
-        ]);
-        if ($validator->fails()) {
+        ]);*/
+
+
+
+        /*if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 400);
         }
 
@@ -54,7 +58,8 @@ class OrdenController extends Controller
         $direccion = Direccion::create($direccion);
         $result['direccion'] = $direccion;
 
-        return response()->json(['success'=>true, 'orden'=>$result], 201);
+        return response()->json(['success'=>true, 'orden'=>$result], 201);*/
+        return null;
     }
 
     /**
