@@ -63,6 +63,41 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmacion."], 201);
     }
 
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = $request->all();
+
+        if(isset($data['name'])){
+            $user->update(['name' => $data['name']]);
+        }
+        if(isset($data['fecha_nac'])){
+            $user->update(['fecha_nac' => $data['fecha_nac']]);
+        }
+        if(isset($data['telefono'])){
+            $user->update(['telefono' => $data['telefono']]);
+        }
+        if(isset($data['departamento'])){
+            $user->update(['departamento' => $data['departamento']]);
+        }
+        if(isset($data['cp'])){
+            $user->update(['cp'=> $data['cp']]);
+        }
+        if(isset($data['ciudad'])){
+            $user->update(['ciudad'=> $data['ciudad']]);
+        }
+        if(isset($data['calle'])){
+            $user->update(['calle'=> $data->input('calle')]);
+        }
+        if(isset($data['passwordNuevo'])){
+            if($data['passwordViejo'] == $user['password']){
+                $user->update(['password'=> $data['passwordNuevo']]);
+            }
+        }
+        return response()->json(['success' => true, 'message' => "Se ha actualizado la informacion del usuario."], 201);
+    }
+
     public function userDetail()
     {
         $user = Auth::user();

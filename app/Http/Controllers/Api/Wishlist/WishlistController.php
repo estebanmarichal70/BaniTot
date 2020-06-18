@@ -33,10 +33,11 @@ class WishlistController extends Controller
         $wishlist = Wishlist::findOrFail($wish_art['wishlist_id']);
         $articulo = Articulo::findOrFail($wish_art['articulo_id']);
 
-        $wishlist->articulos()->attach($articulo);
+        $articulo->wishlist()->attach($wishlist);
 
         return response()->json(['success'=>true, 'articulos_wishlist'=>$wishlist->articulos()->get()], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -51,26 +52,30 @@ class WishlistController extends Controller
         return $wishlist;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
-    }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function detach(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'wishlist_id' => 'required',
+            'articulo_id' => 'required'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 400);
+        }
+
+        $carr_art = $request->all();
+        $wishlist = Wishlist::findOrFail($carr_art['wishlist_id']);
+        $articulo = Articulo::findOrFail($carr_art['articulo_id']);
+
+        $articulo->wishlist()->detach($wishlist);
+
+        return response()->json(['success'=>true, 'articulos_wishlist'=>$wishlist->articulos()->get()], 201);
     }
 }
