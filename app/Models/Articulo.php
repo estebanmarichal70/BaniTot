@@ -24,7 +24,7 @@ class Articulo extends Model
     }
 
     public function carrito(){
-        return $this->belongsToMany('App\Models\Carrito', 'carrito_articulo', 'articulo_id','carrito_id')->withPivot('cantidad');
+        return $this->belongsToMany('App\Models\Carrito', 'carrito_articulo', 'articulo_id','carrito_id');
     }
 
     public function wishlist(){
