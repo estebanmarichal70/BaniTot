@@ -24,7 +24,9 @@ Route::apiResource('articulos', 'Api\Articulo\ArticuloController');
 Route::apiResource('ordenes', 'Api\Orden\OrdenController');
 Route::apiResource('feedback', 'Api\Feedback\FeedbackController');
 Route::apiResource('wishlist', 'Api\Wishlist\WishlistController');
+Route::post('wishlist/detach','Api\Wishlist\WishlistController@detach');
 Route::apiResource('carrito', 'Api\Carrito\CarritoController');
+Route::post('carrito/detach','Api\Carrito\CarritoController@detach');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user-detail', 'Api\Auth\AuthController@userDetail');

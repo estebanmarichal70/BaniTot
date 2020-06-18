@@ -28,18 +28,18 @@ class CarritoController extends Controller
             return response()->json(['error'=>$validator->errors()], 400);
         }
 
-        $wish_art = $request->all();
+        $carr_art = $request->all();
+        $carrito = Carrito::findOrFail($carr_art['carrito_id']);
+        $articulo = Articulo::findOrFail($carr_art['articulo_id']);
 
-
-        $carrito = Carrito::findOrFail($wish_art['carrito_id']);
-        $articulo = Articulo::findOrFail($wish_art['articulo_id']);
-
-        //$articulo->carrito()->attach($carrito,['cantidad'=>$wish_art['cantidad']]);
-
-        $carrito->articulos()->attach($articulo, ['cantidad'=>$wish_art['cantidad']]);
+        if($articulo->carrito()->where('carrito_id', $carrito['id'])->exists())
+            $articulo->carrito()->updateExistingPivot($carrito['id'],['cantidad'=>$carr_art['cantidad']]);
+        else
+            $articulo->carrito()->attach($carrito,['cantidad'=>$carr_art['cantidad']]);
 
         return response()->json(['success'=>true, 'articulos_carrito'=>$carrito->articulos()->get()], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -54,27 +54,30 @@ class CarritoController extends Controller
         return $carrito;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
-    }
-
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function detach(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'carrito_id' => 'required',
+            'articulo_id' => 'required'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 400);
+        }
+
+        $carr_art = $request->all();
+        $carrito = Carrito::findOrFail($carr_art['carrito_id']);
+        $articulo = Articulo::findOrFail($carr_art['articulo_id']);
+
+        $articulo->carrito()->detach($carrito);
+
+        return response()->json(['success'=>true, 'articulos_carrito'=>$carrito->articulos()->get()], 201);
     }
 }
