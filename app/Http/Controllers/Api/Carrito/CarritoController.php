@@ -34,9 +34,11 @@ class CarritoController extends Controller
         $carrito = Carrito::findOrFail($wish_art['carrito_id']);
         $articulo = Articulo::findOrFail($wish_art['articulo_id']);
 
-        $articulo->carrito()->attach($carrito,['cantidad'=>$wish_art['cantidad']]);
+        //$articulo->carrito()->attach($carrito,['cantidad'=>$wish_art['cantidad']]);
 
-        return response()->json(['success'=>true, 'carrito_articulo'=>$articulo], 201);
+        $carrito->articulos()->attach($articulo, ['cantidad'=>$wish_art['cantidad']]);
+
+        return response()->json(['success'=>true, 'articulos_carrito'=>$carrito->articulos()->get()], 201);
     }
 
     /**

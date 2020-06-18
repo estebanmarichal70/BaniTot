@@ -18,7 +18,7 @@ class Wishlist extends Model
 
     public function articulos()
     {
-        return $this->belongsToMany('App\Models\Wishlist', 'wishlist_articulo', 'articulo_id','wishlist_id');
+        return $this->belongsToMany('App\Models\Articulo', 'wishlist_articulo', 'articulo_id','wishlist_id');
     }
 
     public function usuario()

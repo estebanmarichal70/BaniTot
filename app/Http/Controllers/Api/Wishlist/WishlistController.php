@@ -33,9 +33,9 @@ class WishlistController extends Controller
         $wishlist = Wishlist::findOrFail($wish_art['wishlist_id']);
         $articulo = Articulo::findOrFail($wish_art['articulo_id']);
 
-        $articulo->wishlist()->attach($wishlist);
+        $wishlist->articulos()->attach($articulo);
 
-        return response()->json(['success'=>true, 'wishlist_articulo'=>$articulo], 201);
+        return response()->json(['success'=>true, 'articulos_wishlist'=>$wishlist->articulos()->get()], 201);
     }
 
     /**
