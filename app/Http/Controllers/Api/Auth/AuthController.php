@@ -8,7 +8,6 @@ use App\Models\Wishlist;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Hash;
@@ -104,12 +103,17 @@ class AuthController extends Controller
         if (isset($data['ciudad'])) {
             $user->update(['ciudad' => $data['ciudad']]);
         }
-        if (isset($data['calle'])) {
-            $user->update(['calle' => $data->input('calle')]);
+        if(isset($data['calle'])){
+            $user->update(['calle'=> $data['calle']]);
         }
-        if (isset($data['passwordNuevo'])) {
-            if ($data['passwordViejo'] == $user['password']) {
-                $user->update(['password' => $data['passwordNuevo']]);
+        if(isset($data['passwordNuevo'])){
+
+            if(Hash::check($data['passwordViejo'],$user['password'])){
+                $data['passwordNuevo'] = Hash::make($data['passwordNuevo']);
+                $user->update(['password'=> $data['passwordNuevo']]);
+            }
+            else{
+                return response()->json(['error' => "La contraseña introducida es incorrecta"],401);
             }
         }
         return response()->json(['success' => true, 'message' => "Se ha actualizado la informacion del usuario."], 201);
