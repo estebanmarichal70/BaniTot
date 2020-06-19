@@ -23,9 +23,7 @@ class CreateFeedbackTable extends Migration
             $table->bigInteger('articulo_id')->unsigned();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            //$table->foreignId('cliente_id')->nullable()->constrained();
             $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');
-            //$table->foreignId('articulo_id')->nullable()->constrained();
         });
     }
 

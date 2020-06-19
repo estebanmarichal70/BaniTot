@@ -51,6 +51,7 @@ class CarritoController extends Controller
     {
         $carrito = Carrito::findOrFail($id);
         $carrito['articulos'] = $carrito->articulos()->get();
+
         return $carrito;
     }
 

@@ -42,11 +42,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany('App\Models\Role');
     }
 
-    public function carritos(){
-        return $this->hasOne('App\Models\Carrito', 'carrito_id', 'id');
+    public function carrito(){
+        return $this->hasOne('App\Models\Carrito');
     }
 
     public function wishlist(){
-        return $this->hasOne('App\Models\Wishlist', 'wishlist_id', 'id');
+        return $this->hasOne('App\Models\Wishlist');
     }
 }

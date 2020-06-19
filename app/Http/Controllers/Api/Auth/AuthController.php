@@ -22,6 +22,8 @@ class AuthController extends Controller
             $user = $request->user();
             $data['user'] = $user;
             $data['user']['roles'] = $user->roles()->get();
+            $data['user']['carrito'] = $user->carrito()->get();
+            $data['user']['wishlist'] = $user->wishlist()->get();
             $data['token'] = $user->createToken('BanitotApp')->accessToken;
             return response()->json($data, 200);
         }
@@ -60,7 +62,7 @@ class AuthController extends Controller
 
         $this->sendEmailReminder($u);
 
-        return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmacion."], 201);
+        return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmación."], 201);
     }
 
     public function update(Request $request)
@@ -101,6 +103,8 @@ class AuthController extends Controller
     public function userDetail()
     {
         $user = Auth::user();
+        $user['carrito'] = $user->carrito()->get();
+        $user['wishlist'] = $user->wishlist()->get();
 
         return response()->json(['user' => $user], 200);
 
