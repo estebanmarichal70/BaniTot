@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Validator;
 use Hash;
@@ -90,11 +91,16 @@ class AuthController extends Controller
             $user->update(['ciudad'=> $data['ciudad']]);
         }
         if(isset($data['calle'])){
-            $user->update(['calle'=> $data->input('calle')]);
+            $user->update(['calle'=> $data['calle']]);
         }
         if(isset($data['passwordNuevo'])){
-            if($data['passwordViejo'] == $user['password']){
+
+            if(Hash::check($data['passwordViejo'],$user['password'])){
+                $data['passwordNuevo'] = Hash::make($data['passwordNuevo']);
                 $user->update(['password'=> $data['passwordNuevo']]);
+            }
+            else{
+                return response()->json(['error' => "La contraseña introducida es incorrecta"],401);
             }
         }
         return response()->json(['success' => true, 'message' => "Se ha actualizado la informacion del usuario."], 201);
