@@ -16,12 +16,12 @@ class CreateDireccionTable extends Migration
         Schema::create('direccion', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->integer('telefono');
+            $table->string('telefono');
             $table->string('calle');
             $table->string('info');
             $table->string('ciudad');
             $table->string('departamento');
-            $table->integer('codigo');
+            $table->string('codigo');
             $table->bigInteger('orden_id')->unsigned();
             $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
         });

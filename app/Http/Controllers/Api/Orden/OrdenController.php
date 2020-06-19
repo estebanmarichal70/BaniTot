@@ -26,23 +26,22 @@ class OrdenController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        /*$validator = Validator::make($request->all(), [
-            'estado'=> 'required',
+        $validator = Validator::make($request->all(), [
+            'estado' => 'required',
             'monto' => 'required',
-            'user_id'=> 'required',
-            'articulos'=>'required',
-            'direccion'=>'required'
+            'user_id' => 'required',
+            'articulos' => 'required',
+            'direccion' => 'required'
 
-        ]);*/
+        ]);
 
 
-
-        /*if ($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 400);
         }
 
@@ -58,14 +57,13 @@ class OrdenController extends Controller
         $direccion = Direccion::create($direccion);
         $result['direccion'] = $direccion;
 
-        return response()->json(['success'=>true, 'orden'=>$result], 201);*/
-        return null;
+        return response()->json(['success'=>true, 'orden'=>$result], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -79,34 +77,34 @@ class OrdenController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $orden = Orden::find($id);
 
-        if($request->articulos='' && $request->articulos=null)
+        if ($request->articulos = '' && $request->articulos = null)
             $orden->articulos = $request->articulos;
-        if($request->estado='' && $request->estado=null)
+        if ($request->estado = '' && $request->estado = null)
             $orden->estado = $request->estado;
-        if($request->monto='' && $request->monto=null)
+        if ($request->monto = '' && $request->monto = null)
             $orden->monto = $request->monto;
         $orden->save();
-        return response()->json(['success'=>true,'orden'=>$orden], 200);
+        return response()->json(['success' => true, 'orden' => $orden], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         if (Orden::destroy($id))
-            return response()->json(['success'=>true, 'message'=>'Orden borrada exitosamente'], 201);
-        return response()->json(['success'=>false, 'message'=>'Ocurrió un problema al eliminar'], 500);
+            return response()->json(['success' => true, 'message' => 'Orden borrada exitosamente'], 201);
+        return response()->json(['success' => false, 'message' => 'Ocurrió un problema al eliminar'], 500);
     }
 }
