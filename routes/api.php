@@ -46,12 +46,13 @@ Route::group([
 /* ----------------------------------------------------------------------------------------------- */
 
 Route::apiResource('articulos', 'Api\Articulo\ArticuloController');
+Route::get('articulos/count/{id}', 'Api\Articulo\ArticuloController@countRating');
+
 Route::apiResource('ordenes', 'Api\Orden\OrdenController');
 Route::apiResource('feedback', 'Api\Feedback\FeedbackController');
 
 Route::apiResource('wishlist', 'Api\Wishlist\WishlistController');
 Route::post('wishlist/detach', 'Api\Wishlist\WishlistController@detach');
-
 
 Route::apiResource('carrito', 'Api\Carrito\CarritoController');
 Route::post('carrito/detach', 'Api\Carrito\CarritoController@detach');

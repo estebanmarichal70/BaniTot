@@ -39,7 +39,12 @@ class FeedbackController extends Controller
         }
 
         $feedback = $request->all();
-        $result = Feedback::create($feedback);
+        $result = Feedback::where('user_id',$feedback['user_id'])->where('articulo_id',$feedback['articulo_id'])->first();
+
+        if($result)
+            $result->update(['rating' => $feedback['rating']]);
+        else
+            $result = Feedback::create($feedback);
 
         return response()->json(['success'=>true, 'feedback'=>$result], 201);
     }

@@ -354,7 +354,18 @@ class ArticuloController extends Controller
      */
     public function show($id)
     {
-        return Articulo::findOrFail($id);
+        $articulo = Articulo::findOrFail($id);
+        $articulo['feedbacks'] = $articulo->feedbacks()->get();
+
+        return $articulo;
+    }
+
+    public function countRating($id)
+    {
+        $articulo = Articulo::findOrFail($id);
+        $articulo = $articulo->feedbacks()->get()->count();
+
+        return $articulo;
     }
 
     /**
