@@ -18,7 +18,7 @@ class CreateDireccionTable extends Migration
             $table->string('nombre');
             $table->string('telefono');
             $table->string('calle');
-            $table->string('info');
+            $table->string('info')->nullable();
             $table->string('ciudad');
             $table->string('departamento');
             $table->string('codigo');

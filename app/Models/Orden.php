@@ -23,7 +23,7 @@ class Orden extends Model
 
     public function direccion()
     {
-        return $this->hasOne('App\Models\Direccion', 'direccion_id', 'id');
+        return $this->hasOne('App\Models\Direccion');
     }
 
     public function usuario()
