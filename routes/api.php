@@ -22,11 +22,14 @@ Route::group(['prefix' => 'auth'], function () {
         return $request->user();
     });
 
-    Route::get('user-detail', 'Api\Auth\AuthController@userDetail');
     Route::post('login', 'Api\Auth\AuthController@login');
     Route::post('register', 'Api\Auth\AuthController@register');
     Route::put('update', 'Api\Auth\AuthController@update')->middleware('auth:api');
     Route::get('activate/{token}', 'Api\Auth\AuthController@activateAccount');
+});
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('user-detail', 'Api\Auth\AuthController@userDetail');
 });
 /*-------------------------------------------------------------------------------------------------------*/
 
