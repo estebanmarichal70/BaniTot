@@ -5,21 +5,32 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\Carrito;
 use App\Models\Role;
 use App\Models\Wishlist;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Hash;
+use App\Notifications\SignupActivate;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
+
+        $credentials = request(['email', 'password']);
+        $credentials['active'] = 1;
+        $credentials['deleted_at'] = null;
+
+        if (Auth::attempt($credentials)) {
             $user = $request->user();
             $data['user'] = $user;
             $data['user']['roles'] = $user->roles()->get();
@@ -45,8 +56,10 @@ class AuthController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
+
         $user = $request->all();
         $user['password'] = Hash::make($user['password']);
+        $user['activation_token'] = Str::random(60);
         $u = User::create($user);
 
         $role = Role::where("nombre", "=", "CLIENTE")->first();
@@ -58,10 +71,10 @@ class AuthController extends Controller
             $u->roles()->attach($role);
         }
 
-        Carrito::create(["user_id"=>$u["id"]]);
-        Wishlist::create(["user_id"=>$u["id"]]);
+        Carrito::create(["user_id" => $u["id"]]);
+        Wishlist::create(["user_id" => $u["id"]]);
 
-        $this->sendEmailReminder($u);
+        $u->notify(new SignupActivate($user));
 
         return response()->json(['success' => true, 'message' => "Se ha enviado un mail de confirmación."], 201);
     }
@@ -72,23 +85,23 @@ class AuthController extends Controller
 
         $data = $request->all();
 
-        if(isset($data['name'])){
+        if (isset($data['name'])) {
             $user->update(['name' => $data['name']]);
         }
-        if(isset($data['fecha_nac'])){
+        if (isset($data['fecha_nac'])) {
             $user->update(['fecha_nac' => $data['fecha_nac']]);
         }
-        if(isset($data['telefono'])){
+        if (isset($data['telefono'])) {
             $user->update(['telefono' => $data['telefono']]);
         }
-        if(isset($data['departamento'])){
+        if (isset($data['departamento'])) {
             $user->update(['departamento' => $data['departamento']]);
         }
-        if(isset($data['cp'])){
-            $user->update(['cp'=> $data['cp']]);
+        if (isset($data['cp'])) {
+            $user->update(['cp' => $data['cp']]);
         }
-        if(isset($data['ciudad'])){
-            $user->update(['ciudad'=> $data['ciudad']]);
+        if (isset($data['ciudad'])) {
+            $user->update(['ciudad' => $data['ciudad']]);
         }
         if(isset($data['calle'])){
             $user->update(['calle'=> $data['calle']]);
@@ -117,18 +130,20 @@ class AuthController extends Controller
 
     }
 
-
-    /**
-     * Send an e-mail to the user.
-     *
-     * @param  User  $user
-     */
-    public function sendEmailReminder($user)
+    public function activateAccount($token)
     {
-        Mail::send('emails.confirm_account', ['user' => $user], function ($m) use ($user) {
-            $m->from('no-responder@banitot.uy', 'Banitot PCs & Componentes');
+        $user = User::where('activation_token', $token)->first();
 
-            $m->to($user->email, $user->name)->subject('Confirma tu cuenta!');
-        });
+        if (!$user) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'El usuario no existe o ya se encuentra activo.'
+            ], 404);
+        }
+        $user->active = true;
+        $user->activation_token = '';
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
+        $user->save();
+        return Redirect::to(env('APP_CONFIRM_ACCOUNT_REDIRECT', 'http://localhost:8080/cuenta-confirmada'));
     }
 }
