@@ -49,7 +49,7 @@ class SignupActivate extends Notification
             ->line('Gracias por registrarte! Antes de proceder, debes confirmar tu cuenta.')
             ->action('Confirmar cuenta', url($url))
             ->line('Gracias por elegirnos!')
-            ->salutation(new HtmlString('<strong>Saludos<br/>Banitot Team</strong>'));
+            ->salutation(new HtmlString('<strong>Saludos,<br/>Banitot Team</strong>'));
     }
 
     /**

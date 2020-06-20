@@ -47,7 +47,7 @@ class PasswordResetSuccess extends Notification
             ->line('Se cambió la contraseña correctamente')
             ->line('Si fuiste tú quien solicitó el cambio, no precisa que hagas mas nada.')
             ->line('En caso de no haber sido tu, por favor protege tu cuenta.')
-            ->salutation(new HtmlString('<strong>Saludos<br/>Banitot Team</strong>'));
+            ->salutation(new HtmlString('<strong>Saludos,<br/>Banitot Team</strong>'));
     }
 
     /**

@@ -51,7 +51,7 @@ class PasswordResetRequest extends Notification
             ->line('Recibiste este mail debido a que hubo una solicitud de cambio de contraseña asociada al mismo.')
             ->action('Cambiar contraseña', url($url))
             ->line('Si no solicitaste el cambio, no precisa que hagas ninguna accion.')
-            ->salutation(new HtmlString('<strong>Saludos<br/>Banitot Team</strong>'));
+            ->salutation(new HtmlString('<strong>Saludos,<br/>Banitot Team</strong>'));
     }
 
     /**
