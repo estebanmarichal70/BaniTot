@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class PasswordResetRequest extends Notification
 {
@@ -46,9 +47,11 @@ class PasswordResetRequest extends Notification
 
         return (new MailMessage)
             ->subject("Cambio de contraseña")
+            ->greeting("Necesitas ayuda?")
             ->line('Recibiste este mail debido a que hubo una solicitud de cambio de contraseña asociada al mismo.')
             ->action('Cambiar contraseña', url($url))
-            ->line('Si no solicitaste el cambio, no precisa que hagas ninguna accion.');
+            ->line('Si no solicitaste el cambio, no precisa que hagas ninguna accion.')
+            ->salutation(new HtmlString('<strong>Saludos<br/>Banitot Team</strong>'));
     }
 
     /**
