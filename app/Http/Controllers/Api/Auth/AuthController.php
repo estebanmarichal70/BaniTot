@@ -109,6 +109,7 @@ class AuthController extends Controller
     public function userDetail()
     {
         $user = Auth::user();
+        $user['ordenes'] = $user->ordenes()->get();
         $user['carrito'] = $user->carrito()->get();
         $user['wishlist'] = $user->wishlist()->get();
 

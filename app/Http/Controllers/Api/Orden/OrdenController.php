@@ -85,12 +85,7 @@ class OrdenController extends Controller
     {
         $orden = Orden::find($id);
 
-        if ($request->articulos = '' && $request->articulos = null)
-            $orden->articulos = $request->articulos;
-        if ($request->estado = '' && $request->estado = null)
-            $orden->estado = $request->estado;
-        if ($request->monto = '' && $request->monto = null)
-            $orden->monto = $request->monto;
+        $orden->estado = "CANCELADO";
         $orden->save();
         return response()->json(['success' => true, 'orden' => $orden], 200);
     }
