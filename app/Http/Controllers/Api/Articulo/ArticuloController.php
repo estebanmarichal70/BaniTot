@@ -16,7 +16,7 @@ class ArticuloController extends Controller
      */
     public function index(Request $request)
     {
-        $marcas = Articulo::select('marca')->distinct()->get();
+        $marcas = Articulo::select('marca')->where('categoria','=',$request->query('categoria'))->distinct()->get();
 
             /* Orden Asc */
             if ($request->query('order') == 'ASC') {

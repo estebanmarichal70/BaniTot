@@ -69,7 +69,7 @@ class OrdenController extends Controller
     public function show($id)
     {
         $orden = Orden::findOrFail($id);
-        $orden['articulos'] = $orden->articulos()->get();
+        $orden['articulos'] = $orden->articulos()->with('feedbacks')->get();
         $orden['direccion'] = $orden->direccion()->get();
         return $orden;
     }
