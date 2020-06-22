@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Articulo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Articulo;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class ArticuloController extends Controller
@@ -366,6 +367,16 @@ class ArticuloController extends Controller
         $articulo = $articulo->feedbacks()->get()->count();
 
         return $articulo;
+    }
+
+    public function getPrecio(Request $request)
+    {
+
+        $max = Articulo::select('precio')->where('categoria',$request->query('categoria'))->max('precio');
+        $min = Articulo::select('precio')->where('categoria',$request->query('categoria'))->min('precio');
+
+        $result = ['precioMax'=>$max, 'precioMin'=>$min];
+        return $result;
     }
 
     /**
