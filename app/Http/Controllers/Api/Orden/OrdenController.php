@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Orden;
 use App\Http\Controllers\Controller;
 use App\Models\Direccion;
 use App\Models\Orden;
+use App\Models\User;
+use App\Notifications\OrderProcessing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Validator;
@@ -42,14 +44,17 @@ class OrdenController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         $orden = $request->all();
         $result = Orden::create($orden);
-        foreach ($orden['articulos'] as $articulo_id ){
+
+        foreach ($orden['articulos'] as $articulo_id) {
             $articulo = Articulo::findOrFail($articulo_id['id']);
-            $result->articulos()->attach($articulo,['cantidad'=>$articulo_id['cantidad']]);
+            $stock = $articulo->stock - $articulo_id['cantidad'];
+            $articulo->update(["stock" => $stock]);
+            $result->articulos()->attach($articulo, ['cantidad' => $articulo_id['cantidad']]);
         }
 
         $direccion = $request->input('direccion');
@@ -57,7 +62,10 @@ class OrdenController extends Controller
         $direccion = Direccion::create($direccion);
         $result['direccion'] = $direccion;
 
-        return response()->json(['success'=>true, 'orden'=>$result], 201);
+        $user = User::find($request['user_id']);
+        $user->notify(new OrderProcessing($result));
+
+        return response()->json(['success' => true, 'orden' => $result], 201);
     }
 
     /**
