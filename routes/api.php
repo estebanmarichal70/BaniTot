@@ -45,6 +45,7 @@ Route::group([
 
 /* ----------------------------------------------------------------------------------------------- */
 
+Route::get('articulos/precios', 'Api\Articulo\ArticuloController@getPrecio');
 Route::apiResource('articulos', 'Api\Articulo\ArticuloController');
 Route::get('articulos/count/{id}', 'Api\Articulo\ArticuloController@countRating');
 

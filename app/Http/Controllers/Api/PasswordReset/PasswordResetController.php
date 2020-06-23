@@ -75,7 +75,7 @@ class PasswordResetController extends Controller
             ], 404);
         }
         return
-            Redirect::to( 'http://localhost:8080/cambiar-contraseña?token='.$passwordReset->token.'&email='.$passwordReset->email);
+            Redirect::to('http://localhost:8080/restablecer-contraseña?token=' . $passwordReset->token . '&email=' . $passwordReset->email);
     }
 
     /**
