@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Direccion;
 use App\Models\Orden;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\Articulo;
 
@@ -49,6 +48,7 @@ class OrdenController extends Controller
         $result = Orden::create($orden);
         foreach ($orden['articulos'] as $articulo_id ){
             $articulo = Articulo::findOrFail($articulo_id['id']);
+            $articulo->update(['stock' => $articulo['stock'] - $articulo_id['cantidad']]);
             $result->articulos()->attach($articulo,['cantidad'=>$articulo_id['cantidad']]);
         }
 
@@ -83,8 +83,13 @@ class OrdenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $orden = Orden::find($id);
+        $orden = Orden::findOrFail($id);
+        $articulos = $orden->articulos()->get();
 
+        foreach ($articulos as $articulo_id ){
+            $articulo = Articulo::findOrFail($articulo_id['id']);
+            $articulo->update(['stock' => $articulo['stock'] + $articulo_id['pivot']['cantidad']]);
+        }
         $orden->estado = "CANCELADO";
         $orden->save();
         return response()->json(['success' => true, 'orden' => $orden], 200);
